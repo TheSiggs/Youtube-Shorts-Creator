@@ -1,0 +1,7 @@
+{
+  "require": {
+    "json2video/json2video-php-sdk": "^2.0",
+    "ext-curl": "*",
+    "ext-json": "*"
+  }
+}

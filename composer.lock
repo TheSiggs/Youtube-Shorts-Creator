@@ -1,0 +1,53 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "e484d11483601641324c4b734623a72f",
+    "packages": [
+        {
+            "name": "json2video/json2video-php-sdk",
+            "version": "v2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JSON2Video/json2video-php-sdk.git",
+                "reference": "f10ee307d9471188673229a964ae4fe72f2160ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JSON2Video/json2video-php-sdk/zipball/f10ee307d9471188673229a964ae4fe72f2160ff",
+                "reference": "f10ee307d9471188673229a964ae4fe72f2160ff",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "type": "sdk",
+            "autoload": {
+                "psr-4": {
+                    "JSON2Video\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHP SDK for JSON2Video API: Create videos programmatically",
+            "support": {
+                "issues": "https://github.com/JSON2Video/json2video-php-sdk/issues",
+                "source": "https://github.com/JSON2Video/json2video-php-sdk/tree/v2.0.1"
+            },
+            "time": "2022-09-02T15:30:43+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
+}

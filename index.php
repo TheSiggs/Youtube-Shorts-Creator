@@ -10,33 +10,48 @@ $movie = new Movie;
 
 // Set your API key
 // Get your free API key at https://json2video.com
-$movie->setAPIKey('GUqCH3WziX8Z0qx4xxjIFRaxoCkC8Kl7EyVYOTGi');
+$movie->setAPIKey('FQ435dp2me3m4jdXqzyf87dEIryFxd963DCWwkIB');
 
 // Set movie quality: low, medium, high
 $movie->quality = 'high';
-$movie->draft = true;
+$movie->draft = false;
+$movie->resolution = 'full-hd';
+//$movie->width = 607;
+//$movie->height = 1080;
 
-// Create a new scene
-$scene = new Scene;
+$movie->addElement([
+    'type' => 'video',
+    'src' => 'https://drive.google.com/file/d/106GlzUvpHB-iZQhCUMKFQlxEkW7kmAQW/view?usp=sharing',
+    'x' => -657,
+]);
 
-// Set the scene background color
-$scene->background_color = '#4392F1';
-
-// Add a text element printing "Hello world" in a fancy way (basic/006)
-// The element is 10 seconds long and starts 2 seconds from the scene start
-// Element's vertical position is 50 pixels from the top
 
 // Add text to screen in scenes
-
 $resp = runCurl('https://www.reddit.com/r/Showerthoughts/.json');
-$posts = array_slice($resp->data->children, 0, 5, true);
+$posts = array_slice($resp->data->children, 0, 9, true);
 foreach ($posts as $post) {
     $text = $post->data->title;
+    // Create a new scene
+    $scene = new Scene;
+    // Set the scene background color
     $scene->addElement([
         'type' => 'voice',
         'text' => $text,
-        'voice' => 'en-GB-LibbyNeural',
-        'start' => 1.5
+        'start' => 1
+    ]);
+
+    $scene->addElement([
+        'type' => 'text',
+        'style' => '001',
+        'text' => $text,
+        'settings' => [
+            'color' => '#FFFFFF',
+            'font-size' => '60px',
+            'font-family' => 'Roboto Condensed',
+            'shadow' => 2,
+            'text-align' => 'left',
+            'vertical-align' => 'top'
+        ],
     ]);
 
     // Add the scene to the movie

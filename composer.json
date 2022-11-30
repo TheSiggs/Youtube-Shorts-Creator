@@ -2,6 +2,16 @@
   "require": {
     "json2video/json2video-php-sdk": "^2.0",
     "ext-curl": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "google/apiclient": "^2.12.1",
+    "vlucas/phpdotenv": "^5.5"
+  },
+  "scripts": {
+    "pre-autoload-dump": "Google\\Task\\Composer::cleanup"
+  },
+  "extra": {
+    "google/apiclient-services": [
+      "YouTube"
+    ]
   }
 }

@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Shower Thoughts",
+    "link": "https://www.reddit.com/r/Showerthoughts/new/.json",
+    "posts": 7,
+    "include": false,
+    "language": "en",
+    "youtube_tags": "reddit,shower thoughts,speedrun,minecraft,gaming,games,gameing,ideas,sub reddits",
+    "youtube_hashtags": "#shorts #reddit #minecraft #minecraftshorts #quotes #games",
+    "instagram_tags": "#reddit #shower #showerthoughts #mine #minecraft #minecraftmemes #gaming",
+    "tiktok_tags":"#reddit #redditstories #redditreadings #minecraft #gaming #crazy",
+    "voice": "en-US-AriaNeural"
+  },
+  {
+    "name": "Crazy Ideas",
+    "link": "https://www.reddit.com/r/CrazyIdeas/new/.json",
+    "posts": 6,
+    "include": false,
+    "language": "en",
+    "youtube_tags": "reddit,shower thoughts,speedrun,minecraft,gaming,games,gameing,ideas,sub reddits",
+    "youtube_hashtags": "#shorts #reddit #minecraft #minecraftshorts #quotes",
+    "instagram_tags": "#reddit #shower #showerthoughts #mine #minecraft #minecraftmemes #gaming",
+    "tiktok_tags":"#reddit #redditstories #redditreadings #minecraft #gaming #crazy",
+    "voice": "en-US-AriaNeural"
+  },
+  {
+    "name": "Shower Thoughts",
+    "link": "https://www.reddit.com/r/Showerthoughts/new/.json",
+    "posts": 6,
+    "include": true,
+    "language": "es",
+    "youtube_tags": "reddit,shower thoughts,speedrun,minecraft,gaming,games,gameing,ideas,sub reddits,spanish",
+    "youtube_hashtags": "#shorts #reddit #minecraft #minecraftshorts #quotes #games #spanish",
+    "instagram_tags": "#reddit #shower #showerthoughts #mine #minecraft #minecraftmemes #gaming #spanish",
+    "tiktok_tags":"#reddit #redditstories #redditreadings #minecraft #gaming #crazy #spanish #spanishtiktok",
+    "voice": "es-ES-AbrilNeural"
+  },
+  {
+    "name": "Crazy Ideas",
+    "link": "https://www.reddit.com/r/CrazyIdeas/new/.json",
+    "posts": 6,
+    "include": true,
+    "language": "es",
+    "youtube_tags": "reddit,shower thoughts,speedrun,minecraft,gaming,games,gameing,ideas,sub reddits,spanish",
+    "youtube_hashtags": "#shorts #reddit #minecraft #minecraftshorts #quotes #games #spanish",
+    "instagram_tags": "#reddit #shower #showerthoughts #mine #minecraft #minecraftmemes #gaming #spanish",
+    "tiktok_tags":"#reddit #redditstories #redditreadings #minecraft #gaming #crazy #spanish #spanishtiktok",
+    "voice":  "es-ES-AbrilNeural"
+  }
+]

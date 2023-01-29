@@ -34,7 +34,7 @@ class VideoGenerator {
      */
     public function generateVideo(): void {
         // Create a new movie
-        echo "Generating video from " . $this->subreddit->name;
+        echo "Generating video from " . $this->subreddit->name . PHP_EOL;
 
         // Adds a video element directly to the movie
         $this->movie->addElement([
@@ -73,7 +73,7 @@ class VideoGenerator {
                 'type' => 'text',
                 'text' => $filteredText,
                 'settings' => [
-                    'font-size' => '5vh',
+                    'font-size' => '3vh',
                     'text-shadow' => '2px 2px rgba(0, 0, 0, 1)',
                 ]
             ]);

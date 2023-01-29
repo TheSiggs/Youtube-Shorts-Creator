@@ -1,15 +1,15 @@
 [
   {
     "name": "Shower Thoughts",
-    "link": "https://www.reddit.com/r/Showerthoughts/new/.json",
+    "link": "https://www.reddit.com/r/Showerthoughts/hot/.json",
     "posts": 7,
-    "include": false,
+    "include": true,
     "language": "en",
     "youtube_tags": "reddit,shower thoughts,speedrun,minecraft,gaming,games,gameing,ideas,sub reddits",
-    "youtube_hashtags": "#shorts #reddit #minecraft #minecraftshorts #quotes #games",
+    "youtube_hashtags": "#shorts #reddit #minecraft #memes #games #funny",
     "instagram_tags": "#reddit #shower #showerthoughts #mine #minecraft #minecraftmemes #gaming",
     "tiktok_tags":"#reddit #redditstories #redditreadings #minecraft #gaming #crazy",
-    "voice": "en-US-AriaNeural"
+    "voice": "en-AU-DarrenNeural"
   },
   {
     "name": "Crazy Ideas",
@@ -27,7 +27,7 @@
     "name": "Shower Thoughts",
     "link": "https://www.reddit.com/r/Showerthoughts/new/.json",
     "posts": 6,
-    "include": true,
+    "include": false,
     "language": "es",
     "youtube_tags": "reddit,shower thoughts,speedrun,minecraft,gaming,games,gameing,ideas,sub reddits,spanish",
     "youtube_hashtags": "#shorts #reddit #minecraft #minecraftshorts #quotes #games #spanish",
@@ -39,7 +39,7 @@
     "name": "Crazy Ideas",
     "link": "https://www.reddit.com/r/CrazyIdeas/new/.json",
     "posts": 6,
-    "include": true,
+    "include": false,
     "language": "es",
     "youtube_tags": "reddit,shower thoughts,speedrun,minecraft,gaming,games,gameing,ideas,sub reddits,spanish",
     "youtube_hashtags": "#shorts #reddit #minecraft #minecraftshorts #quotes #games #spanish",

@@ -48,7 +48,7 @@ class VideoGenerator {
         // Fetch posts from the reddit api
         $resp = $this->runCurl($this->subreddit->link);
         $posts = array_slice($resp->data->children, 0, $this->subreddit->posts, true);
-        $videoTitle = sprintf('%s: %s.mp4', $this->subreddit->name, $this->translateText($posts[0]->data->title, $this->subreddit->language));
+        $videoTitle = sprintf('%s.mp4', $this->translateText($posts[0]->data->title, $this->subreddit->language));
 
         // Loop through the post and create scenes for each post
         foreach ($posts as $post) {

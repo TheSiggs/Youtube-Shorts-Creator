@@ -48,7 +48,8 @@ class VideoGenerator {
         // Fetch posts from the reddit api
         $resp = $this->runCurl($this->subreddit->link);
         $posts = array_slice($resp->data->children, 0, $this->subreddit->posts, true);
-        $videoTitle = sprintf('%s.mp4', $this->translateText($posts[0]->data->title, $this->subreddit->language));
+        $titleText = $this->translateText($posts[0]->data->title, $this->subreddit->language);
+        $videoTitle = sprintf('%s.mp4', $this->adjustText($titleText));
 
         // Loop through the post and create scenes for each post
         foreach ($posts as $post) {
@@ -169,5 +170,15 @@ class VideoGenerator {
             return $translation['text'];
         }
         return $content;
+    }
+
+    /**
+     * @param string $content
+     * @return string
+     */
+    public function adjustText(string $content): string {
+        $newTitle = substr($content, 0, 90);
+        $newTitle .= ' #shorts';
+        return $newTitle;
     }
 }

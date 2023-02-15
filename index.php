@@ -10,5 +10,9 @@ $dotenv->load();
 $subreddits = array_filter(json_decode(file_get_contents("subreddits.json")), fn ($video) => $video->include === true);
 foreach ($subreddits as $subreddit) {
     $VideoGenerator = new VideoGenerator($subreddit);
-    $VideoGenerator->generateVideo();
+    try {
+        $VideoGenerator->generateVideo();
+    } catch (Exception $e) {
+        throw new Exception('This failed');
+    }
 }

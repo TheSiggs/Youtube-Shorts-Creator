@@ -3,6 +3,8 @@ import os
 import subprocess
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 
 
@@ -57,28 +59,57 @@ def upload_tiktok(file):
     driver.switch_to.frame(iframe)
     chooseFile = driver.find_element(By.XPATH, '//input[@type="file"]')
     chooseFile.send_keys(file)
-    sleep(20)
-    driver.find_element(By.XPATH, "//button/div/div[text()='Post']").click()
+    post_button = WebDriverWait(driver, 120).until(EC.element_to_be_clickable((By.XPATH, '//div[contains(@class, "btn-post")]/button')))
+    sleep(5)
+    post_button.click()
+    sleep(30)
+
+
+def upload_facebook(file):
+    driver.switch_to.new_window('tab')
+    driver.get('https://www.facebook.com/reels/create')
+    sleep(10)
+    driver.find_element(By.XPATH, '//div[contains(@aria-label, "Reels creation form")]').click()
+    sleep(1)
+    chooseFile = driver.find_element(By.XPATH, '//div[contains(@aria-label, "Reels")]//input[@type="file"]')
+    chooseFile.send_keys(file)
+    sleep(5)
+    driver.find_element(By.XPATH, '//div[contains(@aria-label, "Next")]').click()
+    sleep(1)
+    driver.find_element(By.XPATH, '//div[contains(@aria-label, "Next") and contains(@tabindex, "0")]').click()
+    sleep(1)
+    driver.find_element(By.XPATH, '//div[contains(@aria-label, "Publish") and contains(@tabindex, "0")]').click()
+    sleep(50)
 
 
 # e.g. Chrome path in Mac =/Users/x/Library/xx/Chrome/Default/
 user_data_dir = 'C:\\Users\\samsi\\AppData\\Local\\Google\\Chrome\\User Data\\Default'
 
+# Remove files
+for file in glob.glob(os.getcwd()+'\\videos\\*'):
+    os.remove(file)
+
 # Run PHP Script
 out = subprocess.call("docker-compose run --rm php81-service php index.php", shell=True)
+# out = 1
 if out == 0:
-    options = uc.ChromeOptions()
-    options.add_argument("--ignore-certificate-error")
-    options.add_argument("--ignore-ssl-errors")
-    options.add_argument("--user-data-dir=" + user_data_dir)
-    driver = uc.Chrome(options=options)
+    try:
+        options = uc.ChromeOptions()
+        options.add_argument("--ignore-certificate-error")
+        options.add_argument("--ignore-ssl-errors")
+        options.add_argument("--user-data-dir=" + user_data_dir)
+        options.add_argument("--headless")
+        driver = uc.Chrome(options=options)
 
-    # Get most recent file in videos
-    list_of_files = glob.glob(os.getcwd()+'\\videos\\*')
-    latest_file = max(list_of_files, key=os.path.getctime)
+        # Get most recent file in videos
+        list_of_files = glob.glob(os.getcwd()+'\\videos\\*')
+        latest_file = max(list_of_files, key=os.path.getctime)
 
-    upload_youtube(latest_file)
-    upload_ig(latest_file)
-    upload_tiktok(latest_file)
+        upload_youtube(latest_file)
+        upload_ig(latest_file)
+        upload_tiktok(latest_file)
+        upload_facebook(latest_file)
+    except Exception as e:
+        print(e)
 else:
     print("PHP script failed :(")

@@ -71,13 +71,27 @@ class VideoGenerator {
             ]);
 
             $scene->addElement([
-                'type' => 'text',
-                'text' => $filteredText,
+                'type' => 'component',
+                'component' => 'basic/000',
                 'settings' => [
-                    'font-size' => '3vh',
-                    'text-shadow' => '2px 2px rgba(0, 0, 0, 1)',
+                    'card' => [
+                        'background-color' => 'white',
+                        'border' => '10px',
+                        'transform' => 'translate(0px, 100px)'
+                    ],
+                    'headline' => [
+                      'text' => '',
+                      'color' => 'white',
+                    ],
+                    'body' => [
+                        'text' => [
+                            $translatedText
+                        ],
+                        "color" => "black",
+                    ],
                 ]
             ]);
+
             // Add the scene to the movie
             $this->movie->addScene($scene);
         }

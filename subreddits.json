@@ -3,26 +3,24 @@
     "name": "Shower Thoughts",
     "link": "https://www.reddit.com/r/Showerthoughts/hot/.json",
     "posts": 7,
-    "include": false,
+    "include": true,
     "language": "en",
     "youtube_hashtags": "#shorts #reddit #memes #games #funny #art #best #shortvideo #subscribe  #shortsvideo #foryou #fyp",
     "instagram_tags": "#reddit #shower #showerthoughts #gaming #meme #memes #memesdaily #comedy #shorts #fyp #fypage #foryou",
     "tiktok_tags":"#reddit #fyp #foryoupage #funny",
     "voice": "en-AU-DarrenNeural",
     "showTitle": true,
-    "showBody": false,
-    "skipFirstPost": false
+    "showBody": false
   },
   {
     "name": "Am I The Asshole",
-    "link": "https://www.reddit.com/r/AmItheAsshole/hot/.json",
-    "posts": 2,
-    "include": true,
+    "link": "https://www.reddit.com/r/AmITheAssholr/hot/.json",
+    "posts": 1,
+    "include": false,
     "language": "en",
     "voice": "en-AU-DarrenNeural",
     "showTitle": true,
-    "showBody": true,
-    "skipFirstPost": true
+    "showBody": true
   },
   {
     "name": "Crazy Ideas",

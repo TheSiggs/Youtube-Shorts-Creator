@@ -33,6 +33,10 @@ class VideoGenerator {
      * @throws Exception
      */
     public function generateVideo(): void {
+        if (!$this->subreddit->showTitle && !$this->subreddit->showBody) {
+            throw new Exception('Requires either showTitle or showBody to be true to continue');
+        }
+
         // Create a new movie
         echo "Generating video from " . $this->subreddit->name . PHP_EOL;
 
@@ -48,25 +52,49 @@ class VideoGenerator {
         // Fetch posts from the reddit api
         $resp = $this->runCurl($this->subreddit->link);
         $posts = array_slice($resp->data->children, 0, $this->subreddit->posts, true);
-        $titleText = $this->translateText($posts[0]->data->title, $this->subreddit->language);
+        $titleText = $this->translateText($posts[$this->subreddit->skipFirstPost ? 1 : 0]->data->title, $this->subreddit->language);
         $videoTitle = sprintf('%s.mp4', $this->adjustText($titleText));
-
+        $skipped = false;
         // Loop through the post and create scenes for each post
         foreach ($posts as $post) {
-            // Text formatting
-            $initialText = $post->data->title;
-            $translatedText = $this->translateText($initialText, $this->subreddit->language);
-            $filteredText = $this->getFilteredText($translatedText);
-
+            if ($this->subreddit->skipFirstPost && !$skipped) {
+                $skipped = true;
+                continue;
+            }
             // Set up scene
             $scene = new Scene;
             $scene->background_color = 'transparent';
 
+            $title = $post->data->title;
+            $body = $post->data->selftext;
+
+            // Voice Component
+            $voiceText = '';
+            if ($this->subreddit->showTitle) {
+                $voiceText .= $title;
+            }
+            if ($this->subreddit->showBody) {
+                $voiceText .= $body;
+            }
+
+            $voiceText = $this->cutText($voiceText);
+
+            // Text Component
+            if ($this->subreddit->showTitle && $this->subreddit->showBody) {
+                $headlineText = $title;
+                $bodyText = $body;
+            } else {
+                $headlineText = '';
+                $bodyText = $this->subreddit->showTitle ? $title : $body;
+            }
+
+            $bodyText = $this->cutText($bodyText, 200);
+
             // Adds text to speech for the scene
             $scene->addElement([
                 'type' => 'voice',
-                'text' => $translatedText,
-                'start' => 1,
+                'text' => $voiceText,
+                'start' => 0,
                 'voice' => $this->subreddit->voice
             ]);
 
@@ -80,12 +108,12 @@ class VideoGenerator {
                         'transform' => 'translate(0px, 100px)'
                     ],
                     'headline' => [
-                      'text' => '',
-                      'color' => 'white',
+                        'text' => $headlineText,
+                        'color' => 'white',
                     ],
                     'body' => [
                         'text' => [
-                            $translatedText
+                            $bodyText,
                         ],
                         "color" => "black",
                     ],
@@ -159,6 +187,30 @@ class VideoGenerator {
         $api = "https://www.purgomalum.com/service/json?";
         $query = http_build_query(['text' => $text]);
         return $this->runCurl($api.$query)->result;
+    }
+
+    /**
+     * @param string $text
+     * @param int $limit
+     * @return string
+     */
+    private function cutText(string $text, int $limit = 140): string {
+        if (strlen($text) < $limit) {
+            return $text;
+        }
+
+        $newText = explode(' ', $text);
+        $textCount = 0;
+        $returnText = [];
+        foreach ($newText as $textItem) {
+            $textCount += strlen($textItem);
+            if ($textCount < $limit) {
+                $returnText[] = $textItem;
+            } else {
+                return implode(' ', $returnText);
+            }
+        }
+        return $text;
     }
 
     /**

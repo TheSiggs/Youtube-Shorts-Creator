@@ -51,16 +51,12 @@ class VideoGenerator {
 
         // Fetch posts from the reddit api
         $resp = $this->runCurl($this->subreddit->link);
-        $posts = array_slice($resp->data->children, 0, $this->subreddit->posts, true);
-        $titleText = $this->translateText($posts[$this->subreddit->skipFirstPost ? 1 : 0]->data->title, $this->subreddit->language);
+        $filteredPosts = array_filter($resp->data->children, fn($post) => $post->data->stickied === false);
+        $posts = array_slice($filteredPosts, 0, $this->subreddit->posts);
+        $titleText = $this->translateText($posts[0]->data->title, $this->subreddit->language);
         $videoTitle = sprintf('%s.mp4', $this->adjustText($titleText));
-        $skipped = false;
         // Loop through the post and create scenes for each post
         foreach ($posts as $post) {
-            if ($this->subreddit->skipFirstPost && !$skipped) {
-                $skipped = true;
-                continue;
-            }
             // Set up scene
             $scene = new Scene;
             $scene->background_color = 'transparent';
@@ -77,7 +73,7 @@ class VideoGenerator {
                 $voiceText .= $body;
             }
 
-            $voiceText = $this->cutText($voiceText);
+            $voiceText = $this->cutWords($voiceText);
 
             // Text Component
             if ($this->subreddit->showTitle && $this->subreddit->showBody) {
@@ -88,13 +84,13 @@ class VideoGenerator {
                 $bodyText = $this->subreddit->showTitle ? $title : $body;
             }
 
-            $bodyText = $this->cutText($bodyText, 200);
+            $bodyText = $this->cutWords($bodyText, 200);
 
             // Adds text to speech for the scene
             $scene->addElement([
                 'type' => 'voice',
                 'text' => $voiceText,
-                'start' => 0,
+                'start' => 1,
                 'voice' => $this->subreddit->voice
             ]);
 
@@ -194,7 +190,7 @@ class VideoGenerator {
      * @param int $limit
      * @return string
      */
-    private function cutText(string $text, int $limit = 140): string {
+    private function cutText(string $text, int $limit = 200): string {
         if (strlen($text) < $limit) {
             return $text;
         }
@@ -209,6 +205,18 @@ class VideoGenerator {
             } else {
                 return implode(' ', $returnText);
             }
+        }
+        return $text;
+    }
+    /**
+     * @param string $text
+     * @param int $limit
+     * @return string
+     */
+    private function cutWords(string $text, int $limit = 200): string {
+        $textArr = explode(' ', $text);
+        if (count($textArr) > $limit) {
+            return implode(' ', array_slice($textArr, 0, $limit));
         }
         return $text;
     }
@@ -230,7 +238,6 @@ class VideoGenerator {
             ]);
             if (is_null($translation)) {
                 echo "Failed to translate text" . PHP_EOL;
-                die();
             }
             // Print the translation
             return $translation['text'];

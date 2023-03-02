@@ -13,6 +13,7 @@ foreach ($subreddits as $subreddit) {
     try {
         $VideoGenerator->generateVideo();
     } catch (Exception $e) {
+        var_dump($e->getMessage());
         throw new Exception('This failed');
     }
 }

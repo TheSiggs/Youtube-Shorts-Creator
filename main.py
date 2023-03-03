@@ -113,7 +113,7 @@ for file in glob.glob(os.getcwd() + '\\videos\\*'):
     os.remove(file)
 
 # Run PHP Script
-out = 0
+out = 1
 while out != 0:
     out = subprocess.call("docker-compose run --rm php81-service php index.php", shell=True)
 if out == 0:

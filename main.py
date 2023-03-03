@@ -1,7 +1,6 @@
 import glob
 import os
 import subprocess
-from encodings import undefined
 
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
@@ -105,14 +104,14 @@ def upload_facebook(file):
 
 
 # e.g. Chrome path in Mac =/Users/x/Library/xx/Chrome/Default/
-user_data_dir = 'C:\\Users\\samsi\\AppData\\Local\\Google\\Chrome\\User Data\\Default'
+user_data_dir = 'C:\\Users\\Owner\\AppData\\Local\\Google\\Chrome\\User Data\\Default'
 
 # Remove files
 for file in glob.glob(os.getcwd() + '\\videos\\*'):
     os.remove(file)
 
 # Run PHP Script
-out = 1
+out = 0
 while out != 0:
     out = subprocess.call("docker-compose run --rm php81-service php index.php", shell=True)
 
@@ -129,7 +128,7 @@ if out == 0:
         # Get most recent file in videos
         list_of_files = glob.glob(os.getcwd() + '\\videos\\*')
         latest_file = max(list_of_files, key=os.path.getctime)
-
+        sleep(9999)
         print('Started Youtube Upload')
         upload_youtube(latest_file)
         print('Finished Youtube Upload')

@@ -1,20 +1,21 @@
 import glob
 import os
 import subprocess
-from encodings import undefined
-
+import requests
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
-from datetime import datetime
 
 
 def log_error(error):
-    error_log = open('error_log.txt', 'a')
-    error_log.write(f'{datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} ERROR: {error}\n')
-    error_log.close()
+    headers = {"Authorization": "Bearer xoxb-2102419125553-4890952961859-MnsB3ow5KnQx8iBdmi1oDKvz"}
+    data = {
+      "channel": "C04S0BQCSS2",
+      "text": error
+    }
+    requests.post('https://slack.com/api/chat.postMessage', headers=headers, data=data)
 
 
 def upload_youtube(file):
@@ -115,7 +116,6 @@ for file in glob.glob(os.getcwd() + '\\videos\\*'):
 out = 1
 while out != 0:
     out = subprocess.call("docker-compose run --rm php81-service php index.php", shell=True)
-
 if out == 0:
     try:
         options = uc.ChromeOptions()

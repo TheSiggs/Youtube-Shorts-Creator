@@ -7,9 +7,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
+from dotenv import load_dotenv
 
+load_dotenv()
 
-def log_error(error):
+def log(error):
     headers = {"Authorization": "Bearer xoxb-2102419125553-4890952961859-MnsB3ow5KnQx8iBdmi1oDKvz"}
     data = {
       "channel": "C04S0BQCSS2",
@@ -41,7 +43,7 @@ def upload_youtube(file):
         driver.find_element(By.XPATH, '//*[@id="done-button"]').click()
         sleep(0.5)
     except Exception as e:
-        log_error(e)
+        log(e)
 
 
 def upload_ig(file):
@@ -65,7 +67,7 @@ def upload_ig(file):
         next((x for x in buttons if x.text == 'Share'), None).click()
         sleep(20)
     except Exception as e:
-        log_error(e)
+        log(e)
 
 def upload_tiktok(file):
     try:
@@ -82,7 +84,7 @@ def upload_tiktok(file):
         post_button.click()
         sleep(30)
     except Exception as e:
-        log_error(e)
+        log(e)
 
 
 def upload_facebook(file):
@@ -102,11 +104,11 @@ def upload_facebook(file):
         driver.find_element(By.XPATH, '//div[contains(@aria-label, "Publish") and contains(@tabindex, "0")]').click()
         sleep(50)
     except Exception as e:
-        log_error(e)
+        log(e)
 
 
 # e.g. Chrome path in Mac =/Users/x/Library/xx/Chrome/Default/
-user_data_dir = 'C:\\Users\\Owner\\AppData\\Local\\Google\\Chrome\\User Data\\Default'
+log('Started Youtube Shorts Creator')
 
 # Remove files
 for file in glob.glob(os.getcwd() + '\\videos\\*'):
@@ -121,7 +123,7 @@ if out == 0:
         options = uc.ChromeOptions()
         options.add_argument("--ignore-certificate-error")
         options.add_argument("--ignore-ssl-errors")
-        options.add_argument("--user-data-dir=" + user_data_dir)
+        options.add_argument("--user-data-dir=" + os.getenv('CHROME_USER_DIR'))
         options.add_argument("--headless")
         options.add_argument("--mute-audio")
         driver = uc.Chrome(options=options)
@@ -130,24 +132,24 @@ if out == 0:
         list_of_files = glob.glob(os.getcwd() + '\\videos\\*')
         latest_file = max(list_of_files, key=os.path.getctime)
 
-        print('Started Youtube Upload')
+        log('Started Youtube Upload')
         upload_youtube(latest_file)
-        print('Finished Youtube Upload')
+        log('Finished Youtube Upload')
 
-        print('Started Instagram Upload')
+        log('Started Instagram Upload')
         upload_ig(latest_file)
-        print('Finished Instagram Upload')
+        log('Finished Instagram Upload')
 
-        print('Started Tiktok Upload')
+        log('Started Tiktok Upload')
         upload_tiktok(latest_file)
-        print('Finished Tiktok Upload')
+        log('Finished Tiktok Upload')
 
-        print('Started Facebook Upload')
+        log('Started Facebook Upload')
         upload_facebook(latest_file)
-        print('Finished Facebook Upload')
+        log('Finished Facebook Upload')
 
-        print('Completed')
+        log('Finished Youtube Shorts Creator')
     except Exception as e:
-        log_error(e)
+        log(e)
 else:
-    log_error('PHP script failed')
+    log('PHP script failed')

@@ -136,17 +136,17 @@ if out == 0:
         upload_youtube(latest_file)
         log('Finished Youtube Upload')
 
-        log('Started Instagram Upload')
-        upload_ig(latest_file)
-        log('Finished Instagram Upload')
+        # log('Started Instagram Upload')
+        # upload_ig(latest_file)
+        # log('Finished Instagram Upload')
 
         log('Started Tiktok Upload')
         upload_tiktok(latest_file)
         log('Finished Tiktok Upload')
 
-        log('Started Facebook Upload')
-        upload_facebook(latest_file)
-        log('Finished Facebook Upload')
+        # log('Started Facebook Upload')
+        # upload_facebook(latest_file)
+        # log('Finished Facebook Upload')
 
         log('Finished Youtube Shorts Creator')
     except Exception as e:

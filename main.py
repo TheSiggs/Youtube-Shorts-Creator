@@ -8,6 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from dotenv import load_dotenv
+# import tweepy
 
 load_dotenv()
 
@@ -18,6 +19,24 @@ def log(error):
       "text": error
     }
     requests.post('https://slack.com/api/chat.postMessage', headers=headers, data=data)
+
+
+def post_to_twitter():
+    # TODO Post to Twitter
+    consumer_key = 'your_consumer_key'
+    consumer_secret = 'your_consumer_secret'
+    access_token = 'your_access_token'
+    access_token_secret = 'your_access_token_secret'
+
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_token_secret)
+
+    api = tweepy.API(auth)
+
+    tweet_text = "Hello, world! This is a tweet posted using the Twitter API."
+
+    api.update_status(tweet_text)
+
 
 
 def upload_youtube(file):
@@ -66,6 +85,13 @@ def upload_ig(file):
         buttons = driver.find_elements(By.XPATH, '//button')
         next((x for x in buttons if x.text == 'Share'), None).click()
         sleep(20)
+        try:
+            try_again = WebDriverWait(driver, 20).until(
+                EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Try Again")]')))
+            try_again.click()
+            sleep(5)
+        except:
+            print('It worked')
     except Exception as e:
         log(e)
 
@@ -99,15 +125,14 @@ def upload_facebook(file):
         sleep(5)
         driver.find_element(By.XPATH, '//div[contains(@aria-label, "Next")]').click()
         sleep(1)
-        driver.find_element(By.XPATH, '//div[contains(@aria-label, "Next") and contains(@tabindex, "0")]').click()
-        sleep(1)
-        driver.find_element(By.XPATH, '//div[contains(@aria-label, "Publish") and contains(@tabindex, "0")]').click()
+        post_button = WebDriverWait(driver, 120).until(
+            EC.element_to_be_clickable((By.XPATH, '//div[contains(@aria-label, "Publish") and contains(@tabindex, "0")]')))
+        post_button.click()
         sleep(50)
     except Exception as e:
         log(e)
 
 
-# e.g. Chrome path in Mac =/Users/x/Library/xx/Chrome/Default/
 log('Started Youtube Shorts Creator')
 
 # Remove files
@@ -136,17 +161,17 @@ if out == 0:
         upload_youtube(latest_file)
         log('Finished Youtube Upload')
 
-        # log('Started Instagram Upload')
-        # upload_ig(latest_file)
-        # log('Finished Instagram Upload')
+        log('Started Instagram Upload')
+        upload_ig(latest_file)
+        log('Finished Instagram Upload')
 
         log('Started Tiktok Upload')
         upload_tiktok(latest_file)
         log('Finished Tiktok Upload')
 
-        # log('Started Facebook Upload')
-        # upload_facebook(latest_file)
-        # log('Finished Facebook Upload')
+        log('Started Facebook Upload')
+        upload_facebook(latest_file)
+        log('Finished Facebook Upload')
 
         log('Finished Youtube Shorts Creator')
     except Exception as e:

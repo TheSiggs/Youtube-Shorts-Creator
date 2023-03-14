@@ -3,3 +3,4 @@ vendor/
 .env
 .run/*
 videos/*
+subreddits.json

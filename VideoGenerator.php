@@ -57,8 +57,6 @@ class VideoGenerator {
         $resp = $this->runCurl($this->subreddit->link);
         $filteredPosts = array_filter($resp->data->children, fn($post) => $post->data->stickied === false);
         $posts = array_slice($filteredPosts, 0, $this->subreddit->posts);
-        $titleText = $this->translateText($posts[0]->data->title, $this->subreddit->language);
-        $videoTitle = sprintf('%s.mp4', $this->adjustText($titleText));
 
         if (count($posts) > 1) {
             // Loop through the post and create scenes for each post
@@ -91,6 +89,8 @@ class VideoGenerator {
         $newVideo = $this->movie->waitToFinish(callback: fn($e) => throw new Exception('Something went wrong'));
 
         if (!$this->movie->draft) {
+            $titleText = $this->translateText($posts[0]->data->title, $this->subreddit->language);
+            $videoTitle = sprintf('%s.mp4', $this->adjustText($titleText));
             $this->downloadVideo($videoTitle, $newVideo);
         }
     }
@@ -116,7 +116,7 @@ class VideoGenerator {
      * @return void
      * @throws Exception
      */
-    private function generateScene($text, $delay = 1) {
+    private function generateScene($text, int $delay = 1): void {
         // Set up scene
         $scene = new Scene;
         $scene->background_color = 'transparent';

@@ -37,6 +37,10 @@ class VideoGenerator {
             throw new Exception('Requires either showTitle or showBody to be true to continue');
         }
 
+        if ($this->subreddit->posts < 1) {
+            throw new Exception('Need to have one or more posts to generate video');
+        }
+
         // Create a new movie
         echo "Generating video from " . $this->subreddit->name . PHP_EOL;
 
@@ -55,69 +59,30 @@ class VideoGenerator {
         $posts = array_slice($filteredPosts, 0, $this->subreddit->posts);
         $titleText = $this->translateText($posts[0]->data->title, $this->subreddit->language);
         $videoTitle = sprintf('%s.mp4', $this->adjustText($titleText));
-        // Loop through the post and create scenes for each post
-        foreach ($posts as $post) {
-            // Set up scene
-            $scene = new Scene;
-            $scene->background_color = 'transparent';
 
-            $title = $post->data->title;
-            $body = $post->data->selftext;
-
-            // Voice Component
-            $voiceText = '';
+        if (count($posts) > 1) {
+            // Loop through the post and create scenes for each post
+            foreach ($posts as $post) {
+                if ($this->subreddit->showTitle) {
+                    $title = $post->data->title;
+                    $this->generateScene($title);
+                }
+                if ($this->subreddit->showBody) {
+                    $body = $post->data->selftext;
+                    $this->generateScene($body);
+                }
+            }
+        } else {
+            $body = $posts[0]->data->selftext;
+            $body = $this->cutWords($body, 170);
+            $body = explode('.', $body);
             if ($this->subreddit->showTitle) {
-                $voiceText .= $title;
+                $title = $posts[0]->data->title;
+                $this->generateScene($title);
             }
-            if ($this->subreddit->showBody) {
-                $voiceText .= $body;
+            foreach ($body as $bodyParts) {
+                $this->generateScene($bodyParts, 0);
             }
-
-            $voiceText = $this->cutWords($voiceText);
-
-            // Text Component
-            if ($this->subreddit->showTitle && $this->subreddit->showBody) {
-                $headlineText = $title;
-                $bodyText = $body;
-            } else {
-                $headlineText = '';
-                $bodyText = $this->subreddit->showTitle ? $title : $body;
-            }
-
-            $bodyText = $this->cutWords($bodyText, 200);
-
-            // Adds text to speech for the scene
-            $scene->addElement([
-                'type' => 'voice',
-                'text' => $voiceText,
-                'start' => 1,
-                'voice' => $this->subreddit->voice
-            ]);
-
-            $scene->addElement([
-                'type' => 'component',
-                'component' => 'basic/000',
-                'settings' => [
-                    'card' => [
-                        'background-color' => 'white',
-                        'border' => '10px',
-                        'transform' => 'translate(0px, 100px)'
-                    ],
-                    'headline' => [
-                        'text' => $headlineText,
-                        'color' => 'white',
-                    ],
-                    'body' => [
-                        'text' => [
-                            $bodyText,
-                        ],
-                        "color" => "black",
-                    ],
-                ]
-            ]);
-
-            // Add the scene to the movie
-            $this->movie->addScene($scene);
         }
         // Call the API and start rendering the movie
         $this->movie->render();
@@ -125,7 +90,9 @@ class VideoGenerator {
         // Wait for the render to finish
         $newVideo = $this->movie->waitToFinish();
 
-        $this->downloadVideo($videoTitle, $newVideo);
+        if (!$this->movie->draft) {
+            $this->downloadVideo($videoTitle, $newVideo);
+        }
     }
 
     /**
@@ -141,6 +108,41 @@ class VideoGenerator {
             echo "File downloading failed." . PHP_EOL;
         }
     }
+
+    /**
+     * This creates multiple scenes using predefined text
+     * @param $text
+     * @param int $delay
+     * @return void
+     * @throws Exception
+     */
+    private function generateScene($text, $delay = 1) {
+        // Set up scene
+        $scene = new Scene;
+        $scene->background_color = 'transparent';
+
+        // Adds text to speech for the scene
+        $scene->addElement([
+            'type' => 'voice',
+            'text' => $text,
+            'start' => $delay,
+            'voice' => $this->subreddit->voice
+        ]);
+
+        $scene->addElement([
+            'type' => 'text',
+            'style' => "001",
+            'text' => $text,
+            'settings' => [
+                'text-shadow' => '2px 2px rgba(0, 0, 0, 0.5)',
+                'color' => '#FFFFFF',
+            ],
+        ]);
+
+        // Add the scene to the movie
+        $this->movie->addScene($scene);
+    }
+
 
     /**
      * cURL request
@@ -174,40 +176,6 @@ class VideoGenerator {
         return $response;
     }
 
-    /**
-     * Returns a profanity filtered string
-     * @param string $text
-     * @return mixed
-     */
-    public function getFilteredText(string $text): mixed {
-        $api = "https://www.purgomalum.com/service/json?";
-        $query = http_build_query(['text' => $text]);
-        return $this->runCurl($api.$query)->result;
-    }
-
-    /**
-     * @param string $text
-     * @param int $limit
-     * @return string
-     */
-    private function cutText(string $text, int $limit = 200): string {
-        if (strlen($text) < $limit) {
-            return $text;
-        }
-
-        $newText = explode(' ', $text);
-        $textCount = 0;
-        $returnText = [];
-        foreach ($newText as $textItem) {
-            $textCount += strlen($textItem);
-            if ($textCount < $limit) {
-                $returnText[] = $textItem;
-            } else {
-                return implode(' ', $returnText);
-            }
-        }
-        return $text;
-    }
     /**
      * @param string $text
      * @param int $limit

@@ -88,7 +88,7 @@ class VideoGenerator {
         $this->movie->render();
 
         // Wait for the render to finish
-        $newVideo = $this->movie->waitToFinish();
+        $newVideo = $this->movie->waitToFinish(callback: fn($e) => throw new Exception('Something went wrong'));
 
         if (!$this->movie->draft) {
             $this->downloadVideo($videoTitle, $newVideo);

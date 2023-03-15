@@ -1,5 +1,2 @@
 undetected-chromedriver
 python-dotenv
-glob
-os
-subprocess

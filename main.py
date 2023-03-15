@@ -161,7 +161,7 @@ if out == 0:
             options.add_argument("--ignore-certificate-error")
             options.add_argument("--ignore-ssl-errors")
             options.add_argument("--user-data-dir=" + os.getenv('CHROME_USER_DIR'))
-            # options.add_argument("--headless")
+            options.add_argument("--headless")
             options.add_argument("--mute-audio")
             driver = uc.Chrome(options=options)
 

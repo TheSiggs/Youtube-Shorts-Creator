@@ -150,6 +150,10 @@ while out != 0:
     else:
         log("Could not generate video")
         quit()
+
+if os.getenv('ENV') == 'dev':
+    quit('In development mode')
+
 if out == 0:
     try:
         # Get most recent file in videos

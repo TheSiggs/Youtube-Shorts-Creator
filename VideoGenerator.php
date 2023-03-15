@@ -71,11 +71,11 @@ class VideoGenerator {
                 }
             }
         } else {
+            $title = $posts[0]->data->title;
             $body = $posts[0]->data->selftext;
-            $body = $this->cutWords($body, 170);
+            $body = $this->cutWords($body, 138 - count(explode(' ', $title)));
             $body = explode('.', $body);
             if ($this->subreddit->showTitle) {
-                $title = $posts[0]->data->title;
                 $this->generateScene($title);
             }
             foreach ($body as $bodyParts) {

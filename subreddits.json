@@ -16,7 +16,7 @@
     "name": "Am I The Asshole",
     "link": "https://www.reddit.com/r/AmItheAsshole/top/.json",
     "posts": 1,
-    "include": false,
+    "include": true,
     "language": "en",
     "youtube_hashtags": "#shorts",
     "instagram_tags": "#shorts",

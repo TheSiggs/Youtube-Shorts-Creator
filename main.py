@@ -9,6 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from dotenv import load_dotenv
 # import tweepy
+import sys
 
 load_dotenv()
 
@@ -142,7 +143,7 @@ for file in glob.glob(os.getcwd() + '\\videos\\*'):
 # Run PHP Script
 out = 1
 while out != 0:
-    out = subprocess.call("docker-compose run --rm --build php81-service php index.php", shell=True)
+    out = subprocess.call("docker-compose run --rm --build php81-service php index.php '{}'".format(sys.argv[1]), shell=True)
 if out == 0:
     try:
         options = uc.ChromeOptions()

@@ -142,40 +142,51 @@ for file in glob.glob(os.getcwd() + '\\videos\\*'):
 
 # Run PHP Script
 out = 1
+retry = 0
 while out != 0:
-    out = subprocess.call("docker-compose run --rm --build php81-service php index.php '{}'".format(sys.argv[1]), shell=True)
+    if retry < 3:
+        out = subprocess.call("docker-compose run --rm --build php81-service php index.php \"{}\"".format(sys.argv[1]), shell=True)
+        retry += 1
+    else:
+        log("Could not generate video")
+        quit()
 if out == 0:
     try:
-        options = uc.ChromeOptions()
-        options.add_argument("--ignore-certificate-error")
-        options.add_argument("--ignore-ssl-errors")
-        options.add_argument("--user-data-dir=" + os.getenv('CHROME_USER_DIR'))
-        options.add_argument("--headless")
-        options.add_argument("--mute-audio")
-        driver = uc.Chrome(options=options)
-
         # Get most recent file in videos
         list_of_files = glob.glob(os.getcwd() + '\\videos\\*')
         latest_file = max(list_of_files, key=os.path.getctime)
 
-        log('Started Youtube Upload')
-        upload_youtube(latest_file)
-        log('Finished Youtube Upload')
+        if latest_file:
+            options = uc.ChromeOptions()
+            options.add_argument("--ignore-certificate-error")
+            options.add_argument("--ignore-ssl-errors")
+            options.add_argument("--user-data-dir=" + os.getenv('CHROME_USER_DIR'))
+            # options.add_argument("--headless")
+            options.add_argument("--mute-audio")
+            driver = uc.Chrome(options=options)
 
-        log('Started Instagram Upload')
-        upload_ig(latest_file)
-        log('Finished Instagram Upload')
+            log('Started Youtube Upload')
+            upload_youtube(latest_file)
+            log('Finished Youtube Upload')
 
-        log('Started Tiktok Upload')
-        upload_tiktok(latest_file)
-        log('Finished Tiktok Upload')
+            log('Started Instagram Upload')
+            upload_ig(latest_file)
+            log('Finished Instagram Upload')
 
-        log('Started Facebook Upload')
-        upload_facebook(latest_file)
-        log('Finished Facebook Upload')
+            log('Started Tiktok Upload')
+            upload_tiktok(latest_file)
+            log('Finished Tiktok Upload')
 
-        log('Finished Youtube Shorts Creator')
+            log('Started Facebook Upload')
+            upload_facebook(latest_file)
+            log('Finished Facebook Upload')
+
+            log('Finished Youtube Shorts Creator')
+        else:
+            log('No videos found')
     except Exception as e:
         log(e)
+        quit()
 else:
     log('PHP script failed')
+quit()

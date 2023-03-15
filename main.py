@@ -142,7 +142,7 @@ for file in glob.glob(os.getcwd() + '\\videos\\*'):
 # Run PHP Script
 out = 1
 while out != 0:
-    out = subprocess.call("docker-compose run --rm php81-service php index.php", shell=True)
+    out = subprocess.call("docker-compose run --rm --build php81-service php index.php", shell=True)
 if out == 0:
     try:
         options = uc.ChromeOptions()

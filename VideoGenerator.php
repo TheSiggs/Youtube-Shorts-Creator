@@ -86,13 +86,11 @@ class VideoGenerator {
         $this->movie->render();
 
         // Wait for the render to finish
-        $newVideo = $this->movie->waitToFinish(callback: fn($e) => throw new Exception('Something went wrong'));
+        $newVideo = $this->movie->waitToFinish();
 
-        if (!$this->movie->draft) {
-            $titleText = $this->translateText($posts[0]->data->title, $this->subreddit->language);
-            $videoTitle = sprintf('%s.mp4', $this->adjustText($titleText));
-            $this->downloadVideo($videoTitle, $newVideo);
-        }
+        $titleText = $this->translateText($posts[0]->data->title, $this->subreddit->language);
+        $videoTitle = sprintf('%s.mp4', $this->adjustText($titleText));
+        $this->downloadVideo($videoTitle, $newVideo);
     }
 
     /**

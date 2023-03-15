@@ -7,7 +7,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 // Reads the videos from a json file and creates the videos. This will be replaced with variables in the future
-$subreddits = array_filter(json_decode(file_get_contents("subreddits.json")), fn ($video) => $video->include === true);
+$subreddits = json_decode(file_get_contents("subreddits.json"));
 foreach ($subreddits as $subreddit) {
     $VideoGenerator = new VideoGenerator($subreddit);
     try {

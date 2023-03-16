@@ -13,6 +13,19 @@
     "showBody": false
   },
   {
+    "name": "Off My Chest",
+    "link": "https://www.reddit.com/r/offmychest/top/.json",
+    "posts": 1,
+    "include": true,
+    "language": "en",
+    "youtube_hashtags": "#shorts",
+    "instagram_tags": "#shorts",
+    "tiktok_tags":"#shorts",
+    "voice": "en-AU-DarrenNeural",
+    "showTitle": true,
+    "showBody": true
+  },
+  {
     "name": "Am I The Asshole",
     "link": "https://www.reddit.com/r/AmItheAsshole/top/.json",
     "posts": 1,

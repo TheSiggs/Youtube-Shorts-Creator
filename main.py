@@ -8,7 +8,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from dotenv import load_dotenv
-import tweepy
 import sys
 
 load_dotenv()
@@ -22,21 +21,21 @@ def log(error):
     requests.post('https://slack.com/api/chat.postMessage', headers=headers, data=data)
 
 
-def post_to_twitter():
-    # TODO Post to Twitter
-    consumer_key = 'your_consumer_key'
-    consumer_secret = 'your_consumer_secret'
-    access_token = 'your_access_token'
-    access_token_secret = 'your_access_token_secret'
-
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
-
-    api = tweepy.API(auth)
-
-    tweet_text = "Hello, world! This is a tweet posted using the Twitter API."
-
-    api.update_status(tweet_text)
+# def post_to_twitter():
+#     # TODO Post to Twitter
+#     consumer_key = 'your_consumer_key'
+#     consumer_secret = 'your_consumer_secret'
+#     access_token = 'your_access_token'
+#     access_token_secret = 'your_access_token_secret'
+#
+#     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+#     auth.set_access_token(access_token, access_token_secret)
+#
+#     api = tweepy.API(auth)
+#
+#     tweet_text = "Hello, world! This is a tweet posted using the Twitter API."
+#
+#     api.update_status(tweet_text)
 
 
 

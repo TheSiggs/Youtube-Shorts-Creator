@@ -73,20 +73,28 @@ class VideoGenerator {
         } else {
             $title = $posts[0]->data->title;
             $body = $posts[0]->data->selftext;
-            $body = $this->cutWords($body, 138 - count(explode(' ', $title)));
-            $body = explode('.', $body);
+            $body = $this->cutWords($body, 135 - count(explode(' ', $title)));
+            $body = explode('. ', $body);
+
             if ($this->subreddit->showTitle) {
                 $this->generateScene($title);
             }
             foreach ($body as $bodyParts) {
-                $this->generateScene($bodyParts, 0);
+                $bodyParts = $this->cleanText($bodyParts);
+                if (strlen($bodyParts) > 0) {
+                    $this->generateScene($bodyParts, 0);
+                }
             }
         }
         // Call the API and start rendering the movie
         $this->movie->render();
 
         // Wait for the render to finish
-        $newVideo = $this->movie->waitToFinish();
+        $newVideo = $this->movie->waitToFinish(callback: function ($e) {
+            if ($e['status'] === 'error') {
+                throw new Exception($e['message']);
+            }
+        });
 
         $titleText = $this->translateText($posts[0]->data->title, $this->subreddit->language);
         $videoTitle = sprintf('%s.mp4', $this->adjustText($titleText));
@@ -219,5 +227,10 @@ class VideoGenerator {
         $newTitle = substr($content, 0, 90);
         $newTitle .= ' #shorts';
         return $newTitle;
+    }
+
+    public function cleanText(string $content): string {
+        $newString = trim($content);
+        return htmlspecialchars_decode($newString);
     }
 }

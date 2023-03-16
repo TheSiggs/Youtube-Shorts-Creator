@@ -134,6 +134,7 @@ def upload_facebook(file):
 
 
 log('Started Youtube Shorts Creator')
+log('Creating new "{}" video...'.format(sys.argv[1]))
 
 # Remove files
 for file in glob.glob(os.getcwd() + '\\videos\\*'):

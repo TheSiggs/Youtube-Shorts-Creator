@@ -161,7 +161,7 @@ if out == 0:
     try:
         # Get most recent file in videos
         list_of_files = glob.glob(os.getcwd() + '\\videos\\*')
-        latest_file = max(list_of_files, key=os.path.getctime)
+        latest_file = list_of_files[0]
 
         if latest_file:
             options = uc.ChromeOptions()

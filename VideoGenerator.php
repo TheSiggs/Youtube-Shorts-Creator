@@ -219,7 +219,7 @@ class VideoGenerator {
      */
     function setTitle(string $content, string $subreddit, bool $addName): string {
         $tags = '#shorts';
-        $newTitle = $addName ? sprintf('%s: %s', $subreddit, $content) : $content;
+        $newTitle = $addName ? sprintf('%s. %s', $subreddit, $content) : $content;
         $newTitle = substr($newTitle, 0, 100 - strlen($tags) + 1);
         $newTitle = explode(' ', $newTitle);
         while (true) {

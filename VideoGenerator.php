@@ -53,6 +53,20 @@ class VideoGenerator {
             'muted' => true
         ]);
 
+        $this->movie->addElement([
+            'type' => 'text',
+            'style' => "001",
+            'text' => $this->subreddit->subreddit,
+            'width' => 400,
+            'height' => 300,
+            'x' => 0,
+            'y' => -30,
+            'settings' => [
+                'text-shadow' => '2px 2px rgba(0, 0, 0, 0.5)',
+                'color' => '#FFFFFF',
+            ],
+        ]);
+
         // Fetch posts from the reddit api
         $resp = $this->runCurl($this->subreddit->link);
         $filteredPosts = array_filter($resp->data->children, fn($post) => $post->data->stickied === false);
@@ -93,11 +107,12 @@ class VideoGenerator {
         $newVideo = $this->movie->waitToFinish(callback: function ($e) {
             if ($e['status'] === 'error') {
                 throw new Exception($e['message']);
+            } else {
+                print_r($e);
             }
         });
 
-        $titleText = $this->translateText($posts[0]->data->title, $this->subreddit->language);
-        $videoTitle = sprintf('%s.mp4', $this->adjustText($titleText));
+        $videoTitle = sprintf('%s.mp4', $this->setTitle($posts[0]->data->title, $this->subreddit->name, $this->subreddit->addNameToTitle));
         $this->downloadVideo($videoTitle, $newVideo);
     }
 
@@ -108,7 +123,7 @@ class VideoGenerator {
      */
     private function downloadVideo($videoTitle, $newVideo): void {
         // Download video
-        if (file_put_contents('./videos/'.$videoTitle, file_get_contents($newVideo['movie']['url']))) {
+        if (file_put_contents('./videos/' . $videoTitle, file_get_contents($newVideo['movie']['url']))) {
             echo "File downloaded successfully" . PHP_EOL;
         } else {
             echo "File downloading failed." . PHP_EOL;
@@ -156,7 +171,7 @@ class VideoGenerator {
      * General cURL request function for GET and POST
      * @param string $url URL to be requested
      */
-    private function runCurl($url){
+    private function runCurl($url) {
         $ch = curl_init($url);
 
         $options = array(
@@ -165,7 +180,7 @@ class VideoGenerator {
             CURLOPT_TIMEOUT => 10
         );
 
-        if (!empty($_SERVER['HTTP_USER_AGENT'])){
+        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
             $options[CURLOPT_USERAGENT] = $_SERVER['HTTP_USER_AGENT'];
         }
 
@@ -174,7 +189,7 @@ class VideoGenerator {
         $response = json_decode($apiResponse);
 
         //check if non-valid JSON is returned
-        if ($error = json_last_error()){
+        if ($error = json_last_error()) {
             $response = $apiResponse;
         }
         curl_close($ch);
@@ -196,37 +211,26 @@ class VideoGenerator {
     }
 
     /**
-     * @param string $content Text to be translated
-     * @param string $targetLanguage Language to translate in to (For list. See: https://cloud.google.com/translate/docs/languages)
-     * @return mixed
-     */
-    public function translateText(string $content, string $targetLanguage): mixed {
-        if ($targetLanguage !== 'en') {
-            // Authenticate using the service account key file
-            $translate = new TranslateClient([
-                'key' => $_ENV['TRANSLATE_API_KEY']
-            ]);
-            // Translate the text
-            $translation = $translate->translate($content, [
-                'target' => $targetLanguage
-            ]);
-            if (is_null($translation)) {
-                echo "Failed to translate text" . PHP_EOL;
-            }
-            // Print the translation
-            return $translation['text'];
-        }
-        return $content;
-    }
-
-    /**
+     * Title can't be longer than 100 characters
      * @param string $content
+     * @param string $subreddit
+     * @param bool $addName
      * @return string
      */
-    public function adjustText(string $content): string {
-        $newTitle = substr($content, 0, 90);
-        $newTitle .= ' #shorts';
-        return $newTitle;
+    function setTitle(string $content, string $subreddit, bool $addName): string {
+        $tags = '#shorts';
+        $newTitle = $addName ? sprintf('%s: %s', $subreddit, $content) : $content;
+        $newTitle = substr($newTitle, 0, 100 - strlen($tags) + 1);
+        $newTitle = explode(' ', $newTitle);
+        while (true) {
+            if (strlen(end($newTitle)) < 3) {
+                array_pop($newTitle);
+            } else {
+                break;
+            }
+        }
+        $newTitle[] = $tags;
+        return implode(' ', $newTitle);
     }
 
     public function cleanText(string $content): string {

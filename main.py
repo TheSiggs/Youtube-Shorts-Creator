@@ -13,12 +13,15 @@ import sys
 load_dotenv()
 
 def log(error):
-    headers = {"Authorization": "Bearer xoxb-2102419125553-4890952961859-MnsB3ow5KnQx8iBdmi1oDKvz"}
-    data = {
-      "channel": "C04S0BQCSS2",
-      "text": error
-    }
-    requests.post('https://slack.com/api/chat.postMessage', headers=headers, data=data)
+    if os.getenv('ENV') == 'dev':
+        print(error)
+    else:
+        headers = {"Authorization": "Bearer xoxb-2102419125553-4890952961859-MnsB3ow5KnQx8iBdmi1oDKvz"}
+        data = {
+          "channel": "C04S0BQCSS2",
+          "text": error
+        }
+        requests.post('https://slack.com/api/chat.postMessage', headers=headers, data=data)
 
 
 # def post_to_twitter():
@@ -142,7 +145,7 @@ for file in glob.glob(os.getcwd() + '\\videos\\*'):
 
 # Run PHP Script
 out = 1
-retry = 0
+retry = 2 if os.getenv('ENV') == 'dev' else 0
 while out != 0:
     if retry < 3:
         out = subprocess.call("docker-compose run --rm --build php81-service php index.php \"{}\"".format(sys.argv[1]), shell=True)

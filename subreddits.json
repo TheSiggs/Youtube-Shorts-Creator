@@ -1,6 +1,7 @@
 [
   {
     "name": "Shower Thoughts",
+    "subreddit": "r/Showerthoughts",
     "link": "https://www.reddit.com/r/Showerthoughts/hot/.json",
     "posts": 7,
     "include": true,
@@ -10,10 +11,12 @@
     "tiktok_tags":"#shorts",
     "voice": "en-AU-DarrenNeural",
     "showTitle": true,
-    "showBody": false
+    "showBody": false,
+    "addNameToTitle": true
   },
   {
     "name": "Off My Chest",
+    "subreddit": "r/offmychest",
     "link": "https://www.reddit.com/r/offmychest/top/.json",
     "posts": 1,
     "include": true,
@@ -23,10 +26,12 @@
     "tiktok_tags":"#shorts",
     "voice": "en-AU-DarrenNeural",
     "showTitle": true,
-    "showBody": true
+    "showBody": true,
+    "addNameToTitle": true
   },
   {
     "name": "Am I The Asshole",
+    "subreddit": "r/AmItheAsshole",
     "link": "https://www.reddit.com/r/AmItheAsshole/top/.json",
     "posts": 1,
     "include": true,
@@ -36,7 +41,8 @@
     "tiktok_tags":"#shorts",
     "voice": "en-AU-DarrenNeural",
     "showTitle": true,
-    "showBody": true
+    "showBody": true,
+    "addNameToTitle": false
   },
   {
     "name": "Shower Thoughts",

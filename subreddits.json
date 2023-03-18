@@ -15,6 +15,21 @@
     "addNameToTitle": true
   },
   {
+    "name": "Today I Fucked Up",
+    "subreddit": "r/tifu",
+    "link": "https://www.reddit.com/r/tifu/top/.json",
+    "posts": 1,
+    "include": true,
+    "language": "en",
+    "youtube_hashtags": "#shorts",
+    "instagram_tags": "#shorts",
+    "tiktok_tags":"#shorts",
+    "voice": "en-AU-DarrenNeural",
+    "showTitle": true,
+    "showBody": true,
+    "addNameToTitle": false
+  },
+  {
     "name": "Off My Chest",
     "subreddit": "r/offmychest",
     "link": "https://www.reddit.com/r/offmychest/top/.json",

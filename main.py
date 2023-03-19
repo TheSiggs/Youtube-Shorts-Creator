@@ -18,27 +18,38 @@ def log(error):
     else:
         headers = {"Authorization": "Bearer xoxb-2102419125553-4890952961859-MnsB3ow5KnQx8iBdmi1oDKvz"}
         data = {
-          "channel": "C04S0BQCSS2",
-          "text": error
+            "channel": "C04S0BQCSS2",
+            "text": error
         }
         requests.post('https://slack.com/api/chat.postMessage', headers=headers, data=data)
 
 
-# def post_to_twitter():
-#     # TODO Post to Twitter
-#     consumer_key = 'your_consumer_key'
-#     consumer_secret = 'your_consumer_secret'
-#     access_token = 'your_access_token'
-#     access_token_secret = 'your_access_token_secret'
-#
-#     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-#     auth.set_access_token(access_token, access_token_secret)
-#
-#     api = tweepy.API(auth)
-#
-#     tweet_text = "Hello, world! This is a tweet posted using the Twitter API."
-#
-#     api.update_status(tweet_text)
+def printQuota():
+    req = requests.get('https://api.json2video.com/v2/movies', headers={
+        "x-api-key": "GUqCH3WziX8Z0qx4xxjIFRaxoCkC8Kl7EyVYOTGi"
+    })
+    resp = req.json()
+    quota = resp['remaining_quota']
+    log('Quota Remaining - Movies: {}, Drafts: {}'.format(quota['movies'], quota['drafts']))
+
+
+def get_latest_youtube_vid():
+    url = 'https://www.googleapis.com/youtube/v3/search?key=AIzaSyBAmzATERyHVgNkkEc4CDUqCD8ppn0fXLE&channelId=UCkrrIuQTIUcvVobIl_0ofTg&part=snippet,id&order=date&maxResults=1'
+    links = requests.get(url)
+    links_dict = links.json()
+    youtube_links = ['https://www.youtube.com/shorts/{}'.format(item['id']['videoId']) for item in links_dict['items']]
+    return youtube_links[0]
+
+
+def post_to_twitter():
+    driver.switch_to.new_window('tab')
+    driver.get('https://studio.youtube.com/channel/UCkrrIuQTIUcvVobIl_0ofTg')
+    sleep(10)
+    latest_video = get_latest_youtube_vid()
+    tweet = 'New {} Video! {}'.format(sys.argv[1], latest_video)
+    driver.find_element(By.XPATH, '//div[@id="placeholder-cavgb"]').send_keys(tweet)
+    sleep(2)
+    driver.find_element(By.XPATH, '//div[@data-testid="tweetButtonInline"]').click()
 
 
 
@@ -98,6 +109,7 @@ def upload_ig(file):
     except Exception as e:
         log(e)
 
+
 def upload_tiktok(file):
     try:
         driver.switch_to.new_window('tab')
@@ -129,7 +141,8 @@ def upload_facebook(file):
         driver.find_element(By.XPATH, '//div[contains(@aria-label, "Next")]').click()
         sleep(1)
         post_button = WebDriverWait(driver, 120).until(
-            EC.element_to_be_clickable((By.XPATH, '//div[contains(@aria-label, "Publish") and contains(@tabindex, "0")]')))
+            EC.element_to_be_clickable(
+                (By.XPATH, '//div[contains(@aria-label, "Publish") and contains(@tabindex, "0")]')))
         post_button.click()
         sleep(50)
     except Exception as e:
@@ -148,7 +161,8 @@ out = 1
 retry = 2 if os.getenv('ENV') == 'dev' else 0
 while out != 0:
     if retry < 3:
-        out = subprocess.call("docker-compose run --rm --build php81-service php index.php \"{}\"".format(sys.argv[1]), shell=True)
+        out = subprocess.call("docker-compose run --rm --build php81-service php index.php \"{}\"".format(sys.argv[1]),
+                              shell=True)
         retry += 1
     else:
         log("Could not generate video")
@@ -188,7 +202,12 @@ if out == 0:
             upload_facebook(latest_file)
             log('Finished Facebook Upload')
 
+            # log('Started Posting to Twitter')
+            # post_to_twitter()
+            # log('Finished Posting to Twitter')
+
             log('Finished Youtube Shorts Creator')
+            printQuota()
         else:
             log('No videos found')
     except Exception as e:

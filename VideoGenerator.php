@@ -87,7 +87,7 @@ class VideoGenerator {
         } else {
             $title = $posts[0]->data->title;
             $body = $posts[0]->data->selftext;
-            $body = $this->cutWords($body, 135 - count(explode(' ', $title)));
+            $body = $this->cutWords($body, 200 - count(explode(' ', $title)));
             $body = explode('. ', $body);
 
             if ($this->subreddit->showTitle) {
@@ -114,6 +114,8 @@ class VideoGenerator {
 
         $videoTitle = sprintf('%s.mp4', $this->setTitle($posts[0]->data->title, $this->subreddit->name, $this->subreddit->addNameToTitle));
         $this->downloadVideo($videoTitle, $newVideo);
+        // Trim video to 50 seconds
+        exec(sprintf('ffmpeg -y -i ./videos/"%s" -ss 00:00:00 -t 00:00:50 -async 1 output.mp4 && mv -f output.mp4 ./videos/"%s"', $videoTitle, $videoTitle));
     }
 
     /**

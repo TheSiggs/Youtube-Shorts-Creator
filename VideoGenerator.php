@@ -184,6 +184,8 @@ class VideoGenerator {
 
         if (!empty($_SERVER['HTTP_USER_AGENT'])) {
             $options[CURLOPT_USERAGENT] = $_SERVER['HTTP_USER_AGENT'];
+        } else {
+            $options[CURLOPT_USERAGENT] = $_ENV['CURL_USER_AGENT'];
         }
 
         curl_setopt_array($ch, $options);

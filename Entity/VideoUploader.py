@@ -8,7 +8,7 @@ class VideoUploader:
         self.options.add_argument("--ignore-certificate-error")
         self.options.add_argument("--ignore-ssl-errors")
         self.options.add_argument("--user-data-dir=" + chrome_user_dir)
-        # self.options.add_argument("--headless")
+        self.options.add_argument("--headless")
         self.options.add_argument("--mute-audio")
         self.driver = uc.Chrome(options=self.options)
 

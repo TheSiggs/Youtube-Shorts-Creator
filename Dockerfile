@@ -1,9 +1,21 @@
-FROM php:8.1-cli
+FROM ubuntu:jammy
 
-WORKDIR /var/www/project
+WORKDIR /var/local
 
-RUN apt-get update && apt-get -y install ffmpeg
+ENV TZ=Australia/Sydney
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN apt-get update && apt-get install -y ffmpeg curl wget software-properties-common tzdata festival espeak imagemagick && \
+    add-apt-repository -y ppa:deadsnakes/ppa \
+    && apt-get update
 
-COPY . .
+RUN apt-get install -y python3.8 python3-pip
+
+COPY requirements.txt /var/local/requirements.txt
+
+RUN pip3 install -r requirements.txt
+
+COPY policy.xml /etc/ImageMagick-6/policy.xml
+
+COPY google-tts-credentials.json /var/local/google-tts-credentials.json
+ENV GOOGLE_APPLICATION_CREDENTIALS /var/local/google-tts-credentials.json
+

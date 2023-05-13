@@ -3,3 +3,4 @@ vendor/
 .env
 .run/*
 videos/*
+google-tts-credentials.json

@@ -16,6 +16,9 @@ if __name__ == '__main__':
 
     out = subprocess.call(f"docker-compose run --rm --build ubuntu python3 make_video.py  \"{subreddit}\"", shell=True)
 
+    if os.getenv('ENV') == 'dev':
+        quit()
+
     # Get most recent file in videos
     list_of_files = [f for f in os.listdir('videos') if os.path.isfile(os.path.join('videos', f))]
     newVideo = f'{os.getcwd()}/videos/{list_of_files[0]}'

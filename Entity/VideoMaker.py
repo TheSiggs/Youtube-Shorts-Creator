@@ -14,10 +14,12 @@ from google.cloud import texttospeech
 
 class VideoMaker:
     def __init__(self, subreddit_name, logger):
+        self.vetoed_titles = ['Today I Fucked Up', 'Am I The Asshole']
         self.subreddit = subreddit_name
         self.transcripts = []
         self.audio_durations = []
         self.logger = logger
+        self.subreddit_object = self.get_subreddit_from_subreddits_file(subreddit_name)
 
     def audio_from_text(self, text, output, trim=True):
         client = texttospeech.TextToSpeechClient()
@@ -180,6 +182,19 @@ class VideoMaker:
     def cleanup(self):
         shutil.rmtree('temp_videos')
 
+    def process_title(self, video_title):
+        subreddit_name = self.subreddit_object['name']
+        split_title = video_title.split(' ')
+        joined_title = ''
+        if subreddit_name not in self.vetoed_titles:
+            joined_title = f'{subreddit_name}!'
+        hash_tags = self.subreddit_object['youtube_hashtags']
+        for word in split_title:
+            if len(joined_title) + len(word) + len(hash_tags) + 3 < 100:
+                joined_title = ' '.join([joined_title, word])
+        joined_title = ' '.join([joined_title, hash_tags])
+        return joined_title
+
     def generate_video(self):
         try:
             subreddit = self.get_subreddit_from_subreddits_file(self.subreddit)
@@ -230,9 +245,9 @@ class VideoMaker:
             else:
                 video_with_subtitles = video_with_subtitles.subclip(0, 50)
 
-            videoTitle = title
+            videoTitle = self.process_title(title)
             video = f"videos/{videoTitle}.mp4"
-            video_with_subtitles.write_videofile(video)
+            video_with_subtitles.write_videofile(video, fps=30, codec='mpeg4')
             return video
         except Exception as e:
             self.logger.log(f'Error generating video - {self.subreddit}:')

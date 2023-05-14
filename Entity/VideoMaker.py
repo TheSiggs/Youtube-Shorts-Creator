@@ -14,7 +14,6 @@ from google.cloud import texttospeech
 
 class VideoMaker:
     def __init__(self, subreddit_name, logger):
-        self.vetoed_titles = ['Today I Fucked Up', 'Am I The Asshole']
         self.subreddit = subreddit_name
         self.transcripts = []
         self.audio_durations = []
@@ -137,7 +136,11 @@ class VideoMaker:
         for i in range(100):
             response = requests.get(subreddit['link'])
             if response.status_code == 200:
-                posts = response.json()['data']['children'][:subreddit['posts']]
+                if self.subreddit_object['filter_link_flair_text']:
+                    posts = [post for post in response.json()['data']['children'] if
+                             post['data']['link_flair_text'] in self.subreddit_object['filter_link_flair_text']][:subreddit['posts']]
+                else:
+                    posts = response.json()['data']['children'][:subreddit['posts']]
                 content = []
                 showTitle = subreddit['showTitle']
                 showBody = subreddit['showBody']
@@ -149,14 +152,11 @@ class VideoMaker:
                         if showTitle:
                             text = unicodedata.normalize('NFC', post['data']['title']).encode('ascii', 'ignore').decode(
                                 'ascii')
-                            # words = text.split(' ')  # split the string into a list of words
-                            # for i in range(0, len(words), 3):
-                            #     content.append(" ".join(words[i:i]))
                             content.append(text)
                         if showBody:
                             bodyText = post['data']['selftext']
                             bodyText = unicodedata.normalize('NFC', bodyText).encode('ascii', 'ignore').decode('ascii')
-                            words = bodyText.split('. ')  # split the string into a list of words
+                            words = bodyText.split('. ')
                             for chunk in words:
                                 content.append(chunk + '. ')
                 else:
@@ -164,12 +164,16 @@ class VideoMaker:
                     if showTitle:
                         text = unicodedata.normalize('NFC', post['data']['title']).encode('ascii', 'ignore').decode(
                             'ascii')
-                        content.append(text)
+                        content.append(text + '.')
                     if showBody:
                         bodyText = post['data']['selftext']
                         bodyText = unicodedata.normalize('NFC', bodyText).encode('ascii', 'ignore').decode('ascii')
+                        bodyText = bodyText.replace('\n\r', '', -1)
                         bodyText = bodyText.replace('\n', ' ', -1)
-                        words = bodyText.split('. ')  # split the string into a list of words
+                        bodyText = bodyText.replace('\r', '', -1)
+                        bodyText = bodyText.replace('."', '.". ', -1)
+                        bodyText = bodyText.replace('?"', '?". ', -1)
+                        words = bodyText.split('. ')
                         for chunk in words:
                             content.append(chunk + '. ')
                 return content, title
@@ -177,7 +181,7 @@ class VideoMaker:
                 print(f"Too many requests. Retrying in {2} seconds...")
                 time.sleep(2)
             else:
-                print("Failed to make request after 5 attempts.")
+                print("Failed to make request after 100 attempts.")
 
     def cleanup(self):
         shutil.rmtree('temp_videos')
@@ -186,7 +190,7 @@ class VideoMaker:
         subreddit_name = self.subreddit_object['name']
         split_title = video_title.split(' ')
         joined_title = ''
-        if subreddit_name not in self.vetoed_titles:
+        if self.subreddit_object['addNameToTitle']:
             joined_title = f'{subreddit_name}!'
         hash_tags = self.subreddit_object['youtube_hashtags']
         for word in split_title:

@@ -5,14 +5,13 @@
     "link": "https://www.reddit.com/r/Showerthoughts/hot/.json",
     "posts": 8,
     "include": true,
-    "language": "en",
     "youtube_hashtags": "#shorts",
     "instagram_tags": "#shorts",
     "tiktok_tags":"#shorts",
-    "voice": "en-AU-NeilNeural",
     "showTitle": true,
     "showBody": false,
-    "addNameToTitle": true
+    "addNameToTitle": true,
+    "filter_link_flair_text": false
   },
   {
     "name": "Today I Fucked Up",
@@ -20,14 +19,13 @@
     "link": "https://www.reddit.com/r/tifu/top/.json",
     "posts": 1,
     "include": true,
-    "language": "en",
     "youtube_hashtags": "#shorts",
     "instagram_tags": "#shorts",
     "tiktok_tags":"#shorts",
-    "voice": "en-AU-NeilNeural",
     "showTitle": true,
     "showBody": true,
-    "addNameToTitle": false
+    "addNameToTitle": false,
+    "filter_link_flair_text": false
   },
   {
     "name": "Off My Chest",
@@ -35,14 +33,13 @@
     "link": "https://www.reddit.com/r/offmychest/top/.json",
     "posts": 1,
     "include": true,
-    "language": "en",
     "youtube_hashtags": "#shorts",
     "instagram_tags": "#shorts",
     "tiktok_tags":"#shorts",
-    "voice": "en-AU-NeilNeural",
     "showTitle": true,
     "showBody": true,
-    "addNameToTitle": true
+    "addNameToTitle": true,
+    "filter_link_flair_text": false
   },
   {
     "name": "Am I The Asshole",
@@ -50,24 +47,26 @@
     "link": "https://www.reddit.com/r/AmItheAsshole/top/.json",
     "posts": 1,
     "include": true,
-    "language": "en",
     "youtube_hashtags": "#shorts",
     "instagram_tags": "#shorts",
     "tiktok_tags":"#shorts",
-    "voice": "en-AU-NeilNeural",
     "showTitle": true,
     "showBody": true,
-    "addNameToTitle": false
+    "addNameToTitle": false,
+    "filter_link_flair_text": false
   },
   {
-    "name": "Shower Thoughts",
-    "link": "https://www.reddit.com/r/Showerthoughts/new/.json",
-    "posts": 6,
-    "include": false,
-    "language": "es",
+    "name": "Jokes",
+    "subreddit": "r/Jokes",
+    "link": "https://www.reddit.com/r/Jokes/top/.json",
+    "posts": 1,
+    "include": true,
     "youtube_hashtags": "#shorts",
     "instagram_tags": "#shorts",
     "tiktok_tags":"#shorts",
-    "voice": "es-ES-AbrilNeural"
+    "showTitle": true,
+    "showBody": true,
+    "addNameToTitle": true,
+    "filter_link_flair_text": ["Long", "Walks into a bar"]
   }
 ]

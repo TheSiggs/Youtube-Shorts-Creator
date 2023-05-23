@@ -94,7 +94,7 @@ class VideoMaker:
         currentDir = os.getcwd()
         with open(f'{location}/text.txt', 'x') as f:
             f.write(text)
-        self.audio_from_text(text, f'{location}/speech.mp3')
+        self.audio_from_text(text, f'{location}/speech.mp3', False)
 
         with open('temp_videos/scenes/scenes.txt', 'a') as file:
             file.write(f'file \'{currentDir}/{location}/speech.mp3\'\n')

@@ -1,4 +1,5 @@
 import random
+import re
 import shutil
 import time
 from moviepy.editor import *
@@ -10,15 +11,17 @@ import requests
 import json
 import unicodedata
 from google.cloud import texttospeech
+import openai
 
 
 class VideoMaker:
-    def __init__(self, subreddit_name, logger):
+    def __init__(self, subreddit_name, logger, openai_api_key):
         self.subreddit = subreddit_name
         self.transcripts = []
         self.audio_durations = []
         self.logger = logger
         self.subreddit_object = self.get_subreddit_from_subreddits_file(subreddit_name)
+        openai.api_key = openai_api_key
 
     def audio_from_text(self, text, output, trim=True):
         client = texttospeech.TextToSpeechClient()
@@ -210,7 +213,11 @@ class VideoMaker:
 
             # build audio and subtitles
             # Get text blocks to build audio from
-            content, title = self.get_content(subreddit)
+            if subreddit['ai_generated']:
+                content, title = self.generate_content_from_subreddit_title(subreddit)
+            else:
+                content, title = self.get_content(subreddit)
+
             for no, scene in enumerate(content):
                 text = scene
                 self.transcripts.append(text)
@@ -257,3 +264,40 @@ class VideoMaker:
             self.logger.log(f'Error generating video - {self.subreddit}:')
             self.logger.log(e)
             return False
+
+
+    def generate_content_from_subreddit_title(self, subreddit):
+        if subreddit['posts'] > 1:
+            raise Exception('This only works for single posts')
+        for i in range(100):
+            response = requests.get(subreddit['link'])
+            if response.status_code == 200:
+                if self.subreddit_object['filter_link_flair_text']:
+                    posts = [post for post in response.json()['data']['children'] if
+                             post['data']['link_flair_text'] in self.subreddit_object['filter_link_flair_text']]
+                else:
+                    posts = response.json()['data']['children']
+                post = posts[0]
+                title = unicodedata.normalize('NFC', post['data']['title']).encode('ascii', 'ignore').decode('ascii')
+                content = self.openAI_chat_completion('You are an expert at writing content for short videos. When you are given a topic you will expertly write content for a 50 second video. This content will only include the text which will be spoken and nothing else', title)
+                title = self.openAI_chat_completion(f'You are an expert at creating a video title for a given topic. Given a topic you will provide a title, this title MUST be less than 90 characters and contain the works "{subreddit["name"]}"', title)
+                title = unicodedata.normalize('NFC', title).encode('ascii', 'ignore').decode('ascii')
+                content = self.custom_split_with_delimiters(content)
+                return content, title
+            elif response.status_code == 429:
+                print(f"Too many requests. Retrying in {2} seconds...")
+                time.sleep(2)
+
+    def openAI_chat_completion(self, prompt, context):
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": context},
+            ]
+        )
+        return response['choices'][0]['message']['content']
+
+    def custom_split_with_delimiters(self, text):
+        pattern = r'[^.,?!]+[.,?!]*'  # Regular expression pattern to match text followed by optional delimiters
+        return [match.strip() for match in re.findall(pattern, text)]

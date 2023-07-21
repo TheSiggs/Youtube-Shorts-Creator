@@ -7,3 +7,4 @@ google-cloud-texttospeech
 undetected-chromedriver
 python-dotenv
 Pillow==9.5.0
+openai

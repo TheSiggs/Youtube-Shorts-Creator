@@ -11,7 +11,8 @@
     "showTitle": true,
     "showBody": false,
     "addNameToTitle": true,
-    "filter_link_flair_text": false
+    "filter_link_flair_text": false,
+    "ai_generated": false
   },
   {
     "name": "Today I Fucked Up",
@@ -25,7 +26,8 @@
     "showTitle": true,
     "showBody": true,
     "addNameToTitle": false,
-    "filter_link_flair_text": false
+    "filter_link_flair_text": false,
+    "ai_generated": false
   },
   {
     "name": "Off My Chest",
@@ -39,7 +41,8 @@
     "showTitle": true,
     "showBody": true,
     "addNameToTitle": true,
-    "filter_link_flair_text": false
+    "filter_link_flair_text": false,
+    "ai_generated": false
   },
   {
     "name": "Am I The Asshole",
@@ -53,7 +56,8 @@
     "showTitle": true,
     "showBody": true,
     "addNameToTitle": false,
-    "filter_link_flair_text": false
+    "filter_link_flair_text": false,
+    "ai_generated": false
   },
   {
     "name": "Jokes",
@@ -67,6 +71,22 @@
     "showTitle": true,
     "showBody": true,
     "addNameToTitle": true,
-    "filter_link_flair_text": ["Long", "Walks into a bar"]
+    "filter_link_flair_text": ["Long", "Walks into a bar"],
+    "ai_generated": false
+  },
+  {
+    "name": "Today I learned",
+    "subreddit": "r/todayilearned",
+    "link": "https://www.reddit.com/r/todayilearned/hot/.json",
+    "posts": 1,
+    "include": true,
+    "youtube_hashtags": "#shorts",
+    "instagram_tags": "#shorts",
+    "tiktok_tags":"#shorts",
+    "showTitle": true,
+    "showBody": true,
+    "addNameToTitle": false,
+    "filter_link_flair_text": false,
+    "ai_generated": true
   }
 ]

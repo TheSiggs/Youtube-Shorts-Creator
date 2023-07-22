@@ -20,6 +20,8 @@ class Facebook:
             chooseFile.send_keys(file)
             sleep(5)
             self.driver.find_element(By.XPATH, '//div[contains(@aria-label, "Next")]').click()
+            sleep(5)
+            self.driver.find_elements(By.XPATH, '//div[contains(@aria-label, "Next")]')[1].click()
             sleep(1)
             post_button = WebDriverWait(self.driver, 120).until(
                 EC.element_to_be_clickable(

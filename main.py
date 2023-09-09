@@ -14,7 +14,7 @@ if __name__ == '__main__':
     subreddit = sys.argv[1]
     logger = Logger(os.getenv('ENV'))
 
-    out = subprocess.call(f"sudo docker compose run --rm --build ubuntu python3 make_video.py  \"{subreddit}\"", shell=True)
+    out = subprocess.call(f"docker compose run --rm --build ubuntu python3 make_video.py  \"{subreddit}\"", shell=True)
 
     if os.getenv('ENV') == 'dev':
         quit()

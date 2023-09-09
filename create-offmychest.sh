@@ -1,3 +1,3 @@
 #!/bin/bash
 git pull
-python3 main.py "Off My Chest"
+python main.py "Off My Chest"

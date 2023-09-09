@@ -1,3 +1,3 @@
 #!/bin/bash
 git pull
-python main.py "Am I The Asshole"
+python3 main.py "Am I The Asshole"

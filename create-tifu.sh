@@ -1,3 +1,3 @@
 #!/bin/bash
 git pull
-python main.py "Today I Fucked Up"
+python3 main.py "Today I Fucked Up"

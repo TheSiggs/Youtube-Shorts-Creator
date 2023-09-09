@@ -1,3 +1,3 @@
 #!/bin/bash
 git pull
-python main.py "Shower Thoughts"
+python3 main.py "Shower Thoughts"

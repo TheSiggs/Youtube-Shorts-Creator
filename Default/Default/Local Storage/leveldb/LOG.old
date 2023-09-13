@@ -1,0 +1,6 @@
+2023/09/09-17:55:37.357 8633 Reusing MANIFEST /home/nettis/.config/google-chrome/Default/Default/Local Storage/leveldb/MANIFEST-000001
+2023/09/09-17:55:37.358 8633 Recovering log #8
+2023/09/09-17:55:37.359 8633 Reusing old log /home/nettis/.config/google-chrome/Default/Default/Local Storage/leveldb/000008.log 
+2023/09/09-17:55:45.314 8633 Level-0 table #11: started
+2023/09/09-17:55:45.320 8633 Level-0 table #11: 23928 bytes OK
+2023/09/09-17:55:45.323 8633 Delete type=0 #8

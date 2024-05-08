@@ -1,11 +1,11 @@
 import requests
-
+import os
 
 class Logger:
     def __init__(self, is_dev):
         self.is_dev = is_dev
-        self.headers = {"Authorization": "Bearer xoxb-2102419125553-4890952961859-MnsB3ow5KnQx8iBdmi1oDKvz"}
-        self.channel = "C04S0BQCSS2"
+        self.headers = {"Authorization": "Bearer " + os.getenv('SLACK_TOKEN')}
+        self.channel = os.getenv('SLACK_CHANNEL')
 
     def log(self, error):
         if self.is_dev:
